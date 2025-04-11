@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+  frontend:
+    image: node:14
+    container_name: mogutou-frontend
+    working_dir: /app
+    volumes:
+      - ../mogutouERP-vue:/app
+    ports:
+      - "9528:9528"
+    command: sh -c "cd /app && npm install && npm run dev"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=9528
+    networks:
+      - mogutou-network
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:5.7
+    platform: linux/amd64
+    container_name: mogutou-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ircnjfdhnvxwz.
+      MYSQL_DATABASE: mgt
+      MYSQL_CHARACTER_SET_SERVER: utf8mb4
+      MYSQL_COLLATION_SERVER: utf8mb4_unicode_ci
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    networks:
+      - mogutou-network
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.proxy
+    container_name: mogutou-backend
+    ports:
+      - "1989:1988"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - mogutou-network
+    restart: unless-stopped
+
+networks:
+  mogutou-network:
+    driver: bridge

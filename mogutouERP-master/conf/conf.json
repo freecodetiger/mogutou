@@ -1,0 +1,9 @@
+{
+    "mysql": {
+        "name": "root",
+        "password": "ircnjfdhnvxwz.",
+        "DBname": "mgt",
+        "addr": "mysql:3306"
+    },
+    "listen": "0.0.0.0:1988"
+}
