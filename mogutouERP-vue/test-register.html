@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>测试注册功能</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <h1>测试注册功能</h1>
+    <form id="registerForm">
+        <div>
+            <label for="name">姓名：</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div>
+            <label for="tel">电话：</label>
+            <input type="tel" id="tel" name="tel" required>
+        </div>
+        <div>
+            <label for="password">密码：</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <div>
+            <label for="position">职位：</label>
+            <input type="text" id="position" name="position" required>
+        </div>
+        <div>
+            <button type="submit">注册</button>
+        </div>
+    </form>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const tel = document.getElementById('tel').value;
+            const password = document.getElementById('password').value;
+            const position = document.getElementById('position').value;
+            
+            fetch('http://localhost:1988/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name,
+                    tel,
+                    password,
+                    position
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('注册失败');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert('注册成功：' + JSON.stringify(data));
+            })
+            .catch(error => {
+                alert('注册失败：' + error.message);
+            });
+        });
+    </script>
+</body>
+</html>
